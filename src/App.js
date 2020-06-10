@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Item from './components/Item'
+import { ThemeProvider } from 'emotion-theming'
+import theme from '@rebass/preset'
 
-function App() {
+const App = () => {
+  const [data, setData] = useState({});
+  const products = Object.values(data);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch('./data/products.json');
+      const json = await response.json();
+      setData(json);
+    };
+    fetchProducts();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="products-page">
+        <div className="products-filter">
+          Test
+        </div>
+        <div className="products-grid">
+          {products.map((product, i) => (
+            <Item product={product} key={i}></Item>
+          ))}
+        </div>
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
